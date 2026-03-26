@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1B2A4A">
+<title>Cut Tracker — Calili</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a;max-width:500px;margin:0 auto;min-height:100vh;padding:12px 14px 80px}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.hdr-sub{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:1px}.hdr-day{font-size:20px;font-weight:700}.hdr-date{font-size:11px;color:#777}
+.tabs{display:flex;gap:4px}.tab{padding:5px 11px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;font-family:inherit;color:#333}.tab.on{border-color:#1D9E75;background:#E1F5EE;font-weight:700}
+.dnav{display:flex;gap:3px;margin-bottom:12px}.dnav-i{flex:1;text-align:center;padding:6px 0;border-radius:8px;font-size:11px;cursor:pointer;transition:.15s;user-select:none}.dnav-i.sel{background:#1D9E75;color:#fff;font-weight:700}.dnav-i.oth{background:#eee;color:#999}.dnav-i.tring{box-shadow:0 0 0 2px #1D9E75;background:#fff;color:#1D9E75;font-weight:600}.dnav-c{font-size:8px;opacity:.7}
+.rings{display:flex;justify-content:space-around;padding:12px 4px;background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.05)}.rw{position:relative}.rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.rv{font-weight:700}.rv.b{font-size:15px}.rv.s{font-size:12px}.ru{font-size:7px;color:#aaa}
+.rem{display:flex;gap:8px;margin-bottom:12px}.rb{flex:1;border-radius:8px;padding:7px;text-align:center}.rv2{font-size:17px;font-weight:700}.rl{font-size:9px}.rg{background:#E1F5EE}.rg .rv2{color:#0F6E56}.rg .rl{color:#085041}.rr{background:#FCEBEB}.rr .rv2{color:#A32D2D}.rr .rl{color:#791F1F}.rbl{background:#E6F1FB}.rbl .rv2{color:#185FA5}.rbl .rl{color:#0C447C}
+.stit{font-size:11px;font-weight:700;color:#999;margin-bottom:6px}
+.ml{display:flex;align-items:center;gap:7px;padding:10px;margin-bottom:4px;border-radius:10px;border:1px solid #e8e8e8;background:#fff;transition:.15s}.ml.dn{opacity:.85}
+.ck{width:22px;height:22px;border-radius:6px;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:#fff;font-weight:700;cursor:pointer;transition:.15s}
+.mi{flex:1;min-width:0;cursor:pointer}.ms{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}.mn{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mt{font-size:9px;color:#bbb}
+.mm{text-align:right;flex-shrink:0}.mk{font-size:13px;font-weight:700}.mp{font-size:9px;color:#185FA5}
+.K .ck.on{background:#EF9F27;border-color:#EF9F27}.K .ms{color:#854F0B}.K.dn{border-color:#EF9F27;background:#FAEEDA}
+.O .ck.on{background:#1D9E75;border-color:#1D9E75}.O .ms{color:#0F6E56}.O.dn{border-color:#1D9E75;background:#E1F5EE}
+.S .ck.on{background:#7F77DD;border-color:#7F77DD}.S .ms{color:#534AB7}.S.dn{border-color:#7F77DD;background:#EEEDFE}
+.A .ck.on{background:#D85A30;border-color:#D85A30}.A .ms{color:#993C1D}.A.dn{border-color:#D85A30;background:#FAECE7}
+.I .ck.on{background:#378ADD;border-color:#378ADD}.I .ms{color:#185FA5}.I.dn{border-color:#378ADD;background:#E6F1FB}
+.ep{background:#fff;border-radius:14px;padding:10px;margin-top:12px;box-shadow:0 1px 2px rgba(0,0,0,.05)}.qb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}.qn{padding:4px 7px;border-radius:6px;border:1px solid #ddd;background:#fafafa;font-size:10px;cursor:pointer;font-family:inherit}.cb{width:100%;padding:6px;border-radius:8px;border:1px solid #ddd;background:0;font-size:11px;cursor:pointer;font-family:inherit;color:#999}.cf{margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:4px}.cf input{padding:6px;border-radius:6px;border:1px solid #ddd;font-size:11px;font-family:inherit}.cf .fw{grid-column:1/-1}.cs{grid-column:1/-1;padding:7px;border-radius:8px;border:0;background:#1D9E75;color:#fff;font-size:11px;cursor:pointer;font-family:inherit;font-weight:700}
+.xi{display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:11px}.xi:last-child{border:0}.xr{background:0;border:0;cursor:pointer;font-size:13px;color:#ccc;font-family:inherit}
+.wc{padding:10px 12px;border-radius:10px;margin-bottom:5px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04);cursor:pointer}.wc.wt{border:2px solid #1D9E75;background:#E1F5EE}.wb{height:4px;border-radius:2px;background:#eee;overflow:hidden;margin-top:3px}.wf{height:100%;border-radius:2px}
+.ft{margin-top:14px;padding:8px;background:#fff;border-radius:10px;font-size:9px;color:#bbb;text-align:center;line-height:1.4}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center}.modal{background:#fff;width:100%;max-width:500px;max-height:90vh;border-radius:16px 16px 0 0;overflow-y:auto;padding:16px;animation:su .25s}@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;position:sticky;top:0;background:#fff;padding-bottom:8px;border-bottom:1px solid #eee;z-index:1}.mclose{background:0;border:0;font-size:22px;cursor:pointer;padding:4px 8px;color:#999;font-family:inherit}
+.mt2{font-size:16px;font-weight:700;margin-bottom:8px}
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;color:#fff;margin-right:4px}
+.ri{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}.rib{text-align:center;background:#f8f8f5;border-radius:8px;padding:6px 4px}.riv{font-size:14px;font-weight:700}.ril{font-size:8px;color:#999}
+.ing-t{font-size:13px;font-weight:700;margin-bottom:6px;color:#1B2A4A}.ing-r{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f0;font-size:12px}.ing-n{color:#555;flex:1}.ing-a{font-weight:700;text-align:right;min-width:90px}
+.stp{margin-bottom:8px;display:flex;gap:10px}.stp-n{width:26px;height:26px;border-radius:50%;background:#1D9E75;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}.stp-t{font-size:12px;line-height:1.7;color:#444}
+.tip{background:#FAEEDA;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:11px;color:#854F0B;line-height:1.5}.wrn{background:#FCEBEB;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:11px;color:#A32D2D;line-height:1.5}
+.cut-note{background:#E6F1FB;border-radius:8px;padding:8px 10px;margin:8px 0;font-size:11px;color:#0C447C;line-height:1.5}
+.ib{width:24px;height:24px;border-radius:50%;border:1px solid #ddd;background:#fafafa;font-size:11px;cursor:pointer;font-family:inherit;color:#666;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.water-bar{background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);display:flex;align-items:center;gap:10px}
+.water-btns{display:flex;gap:4px}.water-btn{width:32px;height:32px;border-radius:8px;border:1px solid #85B7EB;background:#E6F1FB;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;font-weight:700}
+.water-track{flex:1;height:8px;background:#eee;border-radius:4px;overflow:hidden}.water-fill{height:100%;background:#378ADD;border-radius:4px;transition:width .3s}
+.water-txt{font-size:12px;font-weight:500;color:#185FA5;min-width:55px;text-align:right}
+.pbadge{display:inline-block;font-size:8px;background:#EEEDFE;color:#534AB7;padding:1px 6px;border-radius:4px;margin-left:6px}
+</style>
+</head>
+<body><div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const{useState,useEffect,useCallback}=React;
+const G={kcal:2000,protein:155,fat:50,carbs:232};
+const DATES=["2026-03-25","2026-03-26","2026-03-27","2026-03-28","2026-03-29"];
+const DN={"2026-03-25":"Car 25","2026-03-26":"Per 26","2026-03-27":"Cum 27","2026-03-28":"Cmt 28","2026-03-29":"Paz 29"};
+const DAYNAMES={"2026-03-25":"Carsamba","2026-03-26":"Persembe","2026-03-27":"Cuma","2026-03-28":"Cumartesi","2026-03-29":"Pazar"};
+
+const PLAN={"2026-03-25":[
+{id:"c1",slot:"Kahvalti",name:"Yulaf (60g) + kwark (200g) + muz + bal",kcal:420,protein:30,fat:5,carbs:65,time:"5 dk"},
+{id:"c2",slot:"Ogle",name:"Bulgogi bowl CUT + extra steak",kcal:761,protein:62,fat:24,carbs:84,time:"15 dk"},
+{id:"c3",slot:"Snack",name:"Cottage cheese (150g) + salatalik",kcal:130,protein:16,fat:2,carbs:5,time:"0 dk"},
+{id:"c4",slot:"Aksam",name:"Steak dill CUT (tereyagsiz)",kcal:430,protein:31,fat:11,carbs:52,time:"25 dk"},
+{id:"c6",slot:"Snack",name:"Kwark (200g) ek porsiyon",kcal:92,protein:17,fat:0,carbs:8,time:"0 dk"},
+{id:"c5",slot:"Icecek",name:"Su 2.5L + kahve (2) + yesil cay",kcal:5,protein:0,fat:0,carbs:0,time:""}],
+"2026-03-26":[
+{id:"d1",slot:"Kahvalti",name:"3 yumurta (sprey) + ekmek (2) + avokado 1/8",kcal:370,protein:24,fat:15,carbs:28,time:"10 dk"},
+{id:"d2",slot:"Ogle",name:"Deer meatballs CUT (tereyagsiz)",kcal:395,protein:30,fat:17,carbs:27,time:"25 dk"},
+{id:"d3",slot:"Snack",name:"Kwark (300g) + blueberry (50g)",kcal:210,protein:33,fat:1,carbs:16,time:"0 dk"},
+{id:"d4",slot:"Aksam",name:"Rosemary chicken CUT (5g yag)",kcal:625,protein:41,fat:10,carbs:89,time:"35 dk"},
+{id:"d6",slot:"Snack",name:"Eiwitbrood (2) + cottage (100g)",kcal:215,protein:22,fat:4,carbs:16,time:"2 dk"},
+{id:"d5",slot:"Icecek",name:"Su 2.5L + kahve (2) + yesil cay",kcal:5,protein:0,fat:0,carbs:0,time:""}],
+"2026-03-27":[
+{id:"e1",slot:"Kahvalti",name:"Overnight oats (onceki gece hazirla)",kcal:410,protein:27,fat:7,carbs:55,time:"0 dk"},
+{id:"e2",slot:"Ogle",name:"Deer meatballs CUT (tereyagsiz)",kcal:395,protein:30,fat:17,carbs:27,time:"25 dk"},
+{id:"e3",slot:"Snack",name:"Eiwitbrood (2) + cottage (100g)",kcal:215,protein:22,fat:4,carbs:16,time:"2 dk"},
+{id:"e4",slot:"Aksam",name:"Rosemary chicken CUT (5g yag)",kcal:625,protein:41,fat:10,carbs:89,time:"35 dk"},
+{id:"e6",slot:"Snack",name:"Kwark (200g) + muz (1)",kcal:181,protein:17,fat:0,carbs:31,time:"0 dk"},
+{id:"e5",slot:"Icecek",name:"Su 2.5L + kahve (2) + yesil cay",kcal:5,protein:0,fat:0,carbs:0,time:""}],
+"2026-03-28":[
+{id:"f1",slot:"Kahvalti",name:"Omlet CUT (sprey) 3+1beyaz + ekmek",kcal:310,protein:28,fat:13,carbs:16,time:"10 dk"},
+{id:"f2",slot:"Ogle",name:"Bulgogi bowl CUT + extra steak",kcal:761,protein:62,fat:24,carbs:84,time:"15 dk"},
+{id:"f3",slot:"Snack",name:"Kwark (250g) + ceviz (10g)",kcal:165,protein:25,fat:7,carbs:10,time:"0 dk"},
+{id:"f4",slot:"Aksam",name:"Rosemary chicken CUT (5g yag)",kcal:625,protein:41,fat:10,carbs:89,time:"35 dk"},
+{id:"f5",slot:"Icecek",name:"Su 2.5L + kahve (2)",kcal:3,protein:0,fat:0,carbs:0,time:""}],
+"2026-03-29":[
+{id:"g1",slot:"Kahvalti",name:"Yulaf (60g) + kwark (200g) + muz + bal",kcal:420,protein:30,fat:5,carbs:65,time:"5 dk"},
+{id:"g2",slot:"Ogle",name:"Steak dill CUT (tereyagsiz)",kcal:430,protein:31,fat:11,carbs:52,time:"25 dk"},
+{id:"g3",slot:"Snack",name:"Kwark (250g) + blueberry (50g)",kcal:175,protein:28,fat:1,carbs:13,time:"0 dk"},
+{id:"g4",slot:"Aksam",name:"Rosemary chicken CUT (5g yag)",kcal:625,protein:41,fat:10,carbs:89,time:"35 dk"},
+{id:"g6",slot:"Snack",name:"Yumurta (2) + salatalik",kcal:155,protein:13,fat:10,carbs:1,time:"0 dk"},
+{id:"g5",slot:"Icecek",name:"Su 2.5L + kahve (2) + yesil cay",kcal:5,protein:0,fat:0,carbs:0,time:""}]};
+
+const RCP={c1:"yulaf",c2:"bulgogi",c3:"cottage",c4:"steak",c6:"kwark_ek",
+d1:"eggs",d2:"deer",d3:"kwark_bb",d4:"rose",d6:"eiwit",
+e1:"overnight",e2:"deer",e3:"eiwit",e4:"rose",e6:"kwark_muz",
+f1:"omlet",f2:"bulgogi",f3:"kwark_wal",f4:"rose",
+g1:"yulaf",g2:"steak",g3:"kwark_bb",g4:"rose",g6:"eggs_sn"};
+const R={
+bulgogi:{t:"Bulgogi Bowl + Extra Steak (CUT)",b:"HelloFresh",bc:"#1D9E75",ct:"15 dk",kcal:761,p:62,f:24,c:84,
+note:"Resept karti: 686 kcal, 22g yag, 89g karb, 38g protein (baz). Extra steak +145 kcal, +24P, +8Y. CUT: yarim sos, mayo yok, 5g yag.",
+ing:[["Biftek seritleri (ana paketin YARISI)","100g (terazide)"],["Extra steak seritleri","TAMAMI (~110g)"],["Jasmine pirinc (paketin YARISI)","75g (terazide)"],["Bulgogi sosu (paketin CEYREGI)","17g (terazide!)"],["Soya sosu (paketin yarisi)","10ml = 12g"],["Lahana-havuc karisimi (yarisi)","75g"],["Salatalik","yarim adet (~75g)"],["Sarimsak","yarim dis (~3g)"],["Kizarmis fistik (yarisi)","10g (terazide!)"],["Bal-zencefil dressing (yarisi)","12ml = 13g"],["Aycicek yagi","5g (terazide!)"],["Beyaz sirke (wittewijnazijn)","5ml = 5g"],["Seker (marinasyon icin)","2g (parmak ucu)"],["Su (pirinc icin)","~500ml = 500g"]],
+steps:[
+"PIRINC: Tencereye 500g su (musluktan yarim tencere) koy. Ocak dugmesini orta konuma (5/9) getir. Fokurdayana kadar bekle (3-4 dk). 75g pirinci (terazide tart!) kaynayan suya dok. Kasikla 1 KEZ karistir. Dugmeyi KISIK'a cevir (2/9), kapagi koy. Telefonunda 12 dk timer kur. DOKUNMA.",
+"MARINE (pirinc piserken): Kaseye 100g biftek (ana paketten yarisi, terazide) + extra steak paketi TAMAMI koy. Uzerine 17g bulgogi sosu (terazide! — paketin ceyregi) + 12g soya sosu dok. Yarim dis sarimsagi ez veya cok ince dogra, ekle. Karistir, beklesin.",
+"SALATA (pirinc piserken): Salataligi yarim ay dilimle (3-4mm). 75g lahana-havuc karisimini ayni kaseye koy. 5g beyaz sirke + 2g seker (parmak ucu) + bir tutam tuz ekle, karistir.",
+"ET PISIRME (timer 7. dk'da basla): Tavaya 5g aycicek yagi koy (teraziye tavayi koy, sifirla, 5g yag dok). Dugmeyi ortanin 1 tik ustune getir (6/9). 30 sn bekle — eline sicaklik geliyorsa hazir. Marine eti SOSUYLA birlikte tavaya dok. 5-6 dk pisir. Her 1-2 dk kasikla cevir. Et kahverengiye donene kadar.",
+"PIRINC KONTROL: 12 dk doldu mu? Kapagi ac, kasikla 1 tane pirinc al, agzinda dene — yumusaksa tamam, sertse 2 dk daha. Kalan suyu suz (kapagi aralik tut, suyu lavaboya dokl). Atesi kapat.",
+"SERVIS: Derin tabaga pirinci koy. Yanina/ustune eti tum sosuyla koy. Diger tarafa salata. Dressing paketi (13g, yarisi) uzerine gezdir. 10g fistik (terazide!) serpistir. Buyuk bardak su (300-400ml) yanina."],
+tips:["CUT: Bulgogi sosunun CEYREGI yeter (17g). Tam dokersen +150 kcal, +5g yag.","CUT: Mayo ATLA. Orijinal tarif mayo istiyor ama 15g mayo = 11g saf yag = 99 kcal. Dressing tek basina yeter.","CUT: Yag 5g (orijinal 14g). 9g tasarruf = 81 kcal.","Pirincin YARISINI kullan — 2 kisilik paket ama sen 1 kisisin. Kalan 75g'i posete koy, buzdolabina (Cumartesi icin).","Kalan malzemeleri de ayni sekilde yarimla, buzdolabina koy."],
+warns:["Cig ete dokunduktan sonra elleri SABUNLA yika!","Et koyarken kendinden OTE tarafa birak — yag sicramamasi icin."]},
+
+deer:{t:"Deer Meatballs Sugar Snaps (CUT)",b:"HelloFresh Luxury",bc:"#534AB7",ct:"25 dk",kcal:395,p:30,f:17,c:27,
+note:"Resept karti: 525 kcal, 32g yag, 27g karb, 30g protein. CUT: tereyagi yerine sprey, yag azalt. Tasarruf: -130 kcal, -15g yag.",
+ing:[["Geyik koftesi Provencaals (yarisi)","~120g"],["Sperziebonen / fasulye (yarisi)","~75g"],["Sugar snaps / bezelye (yarisi)","~50g"],["Kastanje champignons (yarisi)","~125g"],["Rode ui (kirmizi sogan)","yarim (~40g)"],["Uienchutney / sogan chutney (yarisi)","~20g"],["Koreaanse kruidenmix","yarim paket"],["Ketjap manis","15ml = 18g (1 yk)"],["Hardal (mosterd)","5g (1 tk)"],["Sambal","2g (isteye bagli)"],["Pisirme spreyi (bakspray)","2 puskurtme (~2g)"],["Olijfolie","3g (terazide)"],["Su (fasulye icin)","~200ml = 200g"],["Tuz","bir tutam"]],
+steps:[
+"FASULYE: Fasulyelerin iki ucunu parmaginla kopar (sert kisim). Genis tencereye 200g su + bir tutam tuz koy, kaynat. Fasulyeleri ekle, 4-5 dk pisir (catirdamali ama cig olmamali). Sugar snap'leri SON 2 dk ekle. Suyu suz (suzgec veya kapak aralik), sebzeleri kenara koy.",
+"SOS YAPIMI: Ayni tencereye (veya tavaya) pisirme spreyi sik (2 puskurtme). Ketjap manis (18g) + hardal (5g) + sambal (2g, isteyen) + uienchutney (20g) + 30ml su (2 yk) ekle. Orta ateste karistir, sos kivamina gelsin (~1 dk).",
+"KOFTE PISIRME: Kofteleri sosa ekle. Kapagi koy, KISIK ates (2/9), 8-9 dk pisir. Her 3 dk karisikla hafifce cevir. Kofte icten pisene kadar (birini kes bak — icerisi pembe olmamali).",
+"MANTAR + SEBZE: Mantarlari dilimle (her birini 3-4 parcaya kes). Fasulye + sugar snap'i tavaya geri ekle. Mantarlari ekle. Koreaanse kruidenmix (yarim paket) serpistir. 3g olijfolie (terazide) ekle. 2-3 dk karistirarak pisir.",
+"SOGAN: Sogani yarim halka kes. Ayri kucuk tavaya pisirme spreyi sik, orta ates, sogani 2-3 dk kavur (yumusamaya baslayana kadar).",
+"SERVIS: Tabaga kofteleri + sebzeleri sos ile koy. Kavrulmus sogani ustune yerlesir."],
+tips:["CUT: Orijinal tarif 2x tereyagi (roomboter) kullaniyor = ~12g saf yag, ~108 kcal. TAMAMEN cikardik, sprey ile degistirdik.","CUT: Olijfolie 14g yerine 3g. 11g tasarruf = 99 kcal.","Geyik eti cok yagsiz (~2g yag/100g). Yagin cogu sos ve pisirme yagindan geliyor — o yuzden CUT cok etkili.","Bu ogun normalde 525 kcal, 32g yag. CUT ile 395 kcal, 17g yag — BUYUK fark!"],
+warns:["Kofteleri cig yeme — icten tamamen pismeli (kahverengi, pembe yok)."]},
+
+rose:{t:"Rosemary Chicken Paprika (CUT)",b:"HelloFresh",bc:"#1D9E75",ct:"35 dk",kcal:625,p:41,f:10,c:89,
+note:"Resept karti: 679 kcal, 16g yag, 89g karb, 41g protein. CUT: yag 14g→5g, sprey. Tasarruf: -54 kcal, -6g yag.",
+ing:[["Kipfilet / tavuk gogus (yarisi)","~100g"],["Parelcouscous (yarisi)","~75g"],["Panko paneermeel (yarisi)","~25g"],["Paprika / biber","yarim (~80g)"],["Courgette / kabak","yarim (~100g)"],["Rode ui","yarim (~40g)"],["Tomatenketchup (yarisi)","~20g"],["Midden-Oosterse kruidenmix","yarim paket"],["Taze biberiye (rozemarijn)","1-2 dal"],["Taze maydanoz (peterselie)","bir tutam"],["Sarimsak (knoflookteen)","yarim dis (~3g)"],["Un (bloem)","14g (1 yk)"],["Olijfolie","5g (terazide!)"],["Zwarte balsamicoazijn","5ml = 5g (1 tk)"],["Zoutarme groentebouillon","150ml = 150g"],["Pisirme spreyi","2 puskurtme"],["Tuz, karabiber","birer tutam"]],
+steps:[
+"FIRIN: Firini 200°C'ye ayarla (ust-alt isitma). Isindirmesi 10-15 dk surer, hemen ac.",
+"PAPRIKA: Paprikayi uzunlamasina kes, cekirdeklerini/beyaz kisimlarini cikar, iri parcala (4-6 parca). Firin tepsisine yagli kagit ser. Paprikayi koy, pisirme spreyi sik, tuz serp. Firina ver, 20-25 dk.",
+"KUSKUS: Sarimsagi ez. Kucuk tencereye 3g olijfolie (terazide) koy, orta ates. Sarimsagi ekle, 30 sn kavur (yanmasin!). 75g parelcouscous ekle, karistir. 150g bouillon dok. Kaynadiginda atesi KISIK yap, kapak koy, 12-14 dk pisir. Timer kur!",
+"KAPLAMA HAZIRLA: Biberiye yapraklarini daldan kopar, ince ince dogra. 3 DUZ tabak al: (1) 14g un, (2) 20g ketchup yay, (3) 25g panko + dogranan biberiye + tuz + biber karistir.",
+"TAVUK DUZLESTIR: Tavugu 2 parca streç film arasina koy. Elinle veya tava dibiyle bastir — ~1cm kalinliga gelene kadar. Bu esit pisirmek icin SART.",
+"TAVUK KAPLA: Once una bula (her taraf), sonra ketchup'a bula, son olarak panko karisimina bastir (her taraf kaplanmali). IPUCU: 1 el islak is (ketchup), 1 el kuru is (un/panko) — karismasin.",
+"TAVUK PISIR: Tavaya 2g olijfolie (terazide) + pisirme spreyi, orta ates. Tavugu koy, HER YUZ 2-3 dk kizart (altin rengi olana kadar). Sonra firin tepsine paprikaların yanina koy, 6-8 dk daha firinla.",
+"SEBZE KAVUR: Kabagi yarim ay dilimle (5mm), sogani halka kes. Ayni tavaya pisirme spreyi, orta ates. 5-7 dk kavur. Midden-Oosterse kruiden + tuz biber ekle.",
+"SERVIS: Tabaga kuskus + sebze + firin paprika + tavuk. Maydanoz serpistir, 5g balsamico azijn gezdir."],
+tips:["CUT: Orijinal tarif 2 yk (28g) olijfolie kullaniyor. Biz 5g + sprey kullandik. 23g yag = 207 kcal tasarruf.","Tavugu duzlestirmek pisirme suresini kisaltir ve esit pisirir.","Firini ONCEDEN ac — soguk firina koyarsan sure uzar ve sonuc kotulesir."],
+warns:["Cig tavuga dokunan bicak/tahta ile sebzelere DOKUNMA! Ayri kullan.","Firin 200°C — eline eldiven/tutacak giymeden dokunma!","Tavuk icten tamamen beyaz olmali — pembeyse firina geri koy."]},
+
+steak:{t:"Steak Potato Salad Dill (CUT)",b:"HelloFresh",bc:"#1D9E75",ct:"25 dk",kcal:430,p:31,f:11,c:52,
+note:"Resept karti: 601 kcal, 30g yag, 52g karb, 31g protein. CUT: tereyagi yok (sprey), mayo yarim (7g), extra vierge yok, tek yag 5g. Tasarruf: -171 kcal, -19g yag.",
+ing:[["Marine biftek (YARISI)","~100g (terazide)"],["Patates (aardappelen, yarisi)","~200g"],["Sperziebonen / fasulye (yarisi)","~75g"],["Turp / radijs (yarisi)","3-4 adet (~30g)"],["Rode ui","yarim (~40g)"],["Taze dereotu (dille)","bir tutam (~5g)"],["Uienchutney (yarisi)","~20g"],["Olijfolie","5g (terazide!)"],["Pisirme spreyi","2-3 puskurtme"],["Mayonaise","7g (terazide! — yari porsiyon)"],["Bal (honing)","5ml = 7g (yarim tk)"],["Hardal (mosterd)","3g (yarim tk)"],["Beyaz sirke (wittewijnazijn)","3ml = 3g (yarim tk)"],["Su (patates icin)","~300ml = 300g"],["Tuz, karabiber","birer tutam"]],
+steps:[
+"HAZIRLIK: Biftegin YARISINI paketinden cikar (~100g terazide), diger yarisini strec filmle sarip buzdolabina koy. Biftek oda sicakliginda 15-20 dk beklesin (kagit havluyla kurulamak icin masada birak).",
+"PATATES: Patatesleri yika (kabugu soyma — besin orada). Iri parcala (her birini 4'e bol). Genis tavaya koy, 300g su ekle, kapagi koy, orta ates (5/9). 12-15 dk buharda pisir (bicakla batir — kolayca giriyorsa pismis). Suyu suz.",
+"PATATES KIZART: Ayni tavaya 3g olijfolie (terazide) ekle, atesi orta-yuksek yap (6/9). Patatesleri kapaksiz 5-7 dk kizart. Arada cevir, kenarlar hafif altinrengi olsun.",
+"FASULYE: Fasulye uclarini kopar, ortadan kes. Patatesler piserken son 6-8 dk ayni tencereye ekle. Birlikte pissinler.",
+"DRESSING: Kucuk kasede karistir: 7g mayonez (TERAZIDE — 7g, orijinalin yarisi!) + 3g hardal + 7g bal + 3g sirke + dereotunun YARISI (ince dogra). Tuz biber. Karistir.",
+"TURP + UI: Turplari ince dilimle (2mm). Sogani yarim halka kes.",
+"BIFTEK PISIR: Temiz tavaya pisirme spreyi sik (3 puskurtme), YUKSEK ates (8/9). Iyice isindirmak icin 1 dk bekle. Biftek kagit havluyla KURULA (islak et kizarmaz, buharlanir). Tavaya koy: HER YUZ 2-2.5 dk (medium icin). DOKUNMA, cevirme yok, sadece 1 kez cevir. Cikar, tabaga koy, tuz+biber serp, folyo ile ort, 3 dk DINLENDIR.",
+"BIFTEK SOSU: Ayni sicak tavaya 20g uienchutney + 15g su (1 yk) ekle, 1 dk kaynat, karistir. Sos hazir.",
+"SALADE: Buyuk kaseye patatesleri + fasulyeleri + turplari koy. Dressingi dok, karistir. Sogani ustune yay.",
+"SERVIS: Biftek liflere DIK olarak dilimle (5mm kalinlik). Tabaga patates salatasi + biftek koy. Sosu etin uzerine gezdir. Kalan dereotu serpistir."],
+tips:["CUT: Tereyagi TAMAMEN cikarildi (orijinal 7g roomboter = 5.8g yag). Sprey ile degistirildi.","CUT: Mayo 15g'den 7g'a indirildi. 8g tasarruf = 6g yag = 54 kcal.","CUT: Extra vierge olijfolie CIKARILDI (7g = 7g yag = 63 kcal).","Biftek 3 dk DINLENDIRMEK SART — keserken suyu icinde kalir, kuru olmaz.","2-2.5 dk/yuz = medium. 1 dk = rare (cig gibi), 3 dk = well done (kuru)."],
+warns:["Tava COK sicak — yag sicramamasi icin eti kendinden OTE tarafa birak.","Biftek koyarken tavaya SU SICRATMA (kagit havluyla kurulamayi UNUTMA)."]},
+
+yulaf:{t:"Yulaf + Kwark + Muz + Bal",b:"Kahvalti",bc:"#EF9F27",ct:"5 dk",kcal:420,p:30,f:5,c:65,note:"",
+ing:[["Yulaf ezmesi (havermout)","60g (terazide)"],["AH magere kwark","200g (terazide)"],["Muz","1 adet (~120g)"],["Bal (honing)","10ml = 14g (terazide)"]],
+steps:["Teraziye kase koy, SIFIRLA (tare butonu). 60g yulaf ezmesi tart, kaseye dok.","Teraziyi TEKRAR sifirla. 200g magere kwark ekle.","Muzu soy, uzerine dilimle.","Teraziyi sifirla, 14g bal (= 10ml, ~1 tatli kasigi) gezdir. Karistir, ye!"],
+tips:["Kwark 1kg paket — haftada 4-5 gun kullanacaksin, buzdolabinda 7 gun dayanir.","Koyu gelirse 50-100ml su ekle."],warns:[]},
+
+eggs:{t:"3 Yumurta + Ekmek + Avokado 1/8",b:"Kahvalti",bc:"#EF9F27",ct:"10 dk",kcal:370,p:24,f:15,c:28,note:"CUT: avokado 1/4→1/8. Pisirme yagsiz (sprey).",
+ing:[["Yumurta","3 adet"],["AH volkoren brood","2 dilim"],["Avokado","1/8 adet (~20g)"],["Pisirme spreyi","1 puskurtme"],["Tuz, karabiber","birer tutam"]],
+steps:["Tencereye su doldur (yumurtalar tamamen batacak kadar), kaynat.","Kaynayinca yumurtalari kasikla yavasca koy. 8 dk = leziz sari, 10 dk = tam sert. Timer kur.","Soguk suya al (musluktan soguk su dok ustune), 2 dk bekle, soy.","Ekmekleri kizart (tost makinesi veya kuru tava — yag yok).","Avokado: bicakla ikiye bol, cekirdegi cikar, 1/4'unu kes, o 1/4'un de yarisini (= 1/8) ekmege ez. Geri kalanini strec filmle sarip buzdolabina koy.","Tabaga ekmek + yumurta + tuz biber. Ye!"],
+tips:["CUT: Avokado 1/4 = 8g yag, 1/8 = 4g yag. Her gram onemli.","Kalan avokado strec filmle SIKI sar (hava degmesin) + limon sik — 1-2 gun dayanir."],warns:[]},
+
+overnight:{t:"Overnight Oats",b:"Kahvalti",bc:"#EF9F27",ct:"0 dk (onceki gece hazirla)",kcal:410,p:27,f:7,c:55,note:"",
+ing:[["Yulaf ezmesi","60g (terazide)"],["Sut (halfvolle melk)","200ml = 206g (terazide)"],["Chia tohumu (zaad)","10g (terazide)"],["AH magere kwark","150g (terazide)"]],
+steps:["ONCEKI GECE: Kavanoz veya kaseye 60g yulaf + 206g sut (terazide) + 10g chia dok.","Karistir, kapagi/strec film koy, buzdolabina koy. Gece boyunca sisecek.","SABAH: Buzdolabindan cikar. Uzerine 150g kwark (terazide) ekle, karistir. YE!"],
+tips:["Meyve eklemek istersen SABAH ekle — onceki gece koyarsan ezilir.","Kavanozda yaparsan okula goturebilirsin.","Sut 200ml = 206g. Terazide gramla tart daha hassas."],warns:[]},
+
+omlet:{t:"Omlet + Ekmek + Domates (CUT)",b:"Kahvalti",bc:"#EF9F27",ct:"10 dk",kcal:310,p:28,f:13,c:16,note:"CUT: yag/tereyagi yerine sprey. 4. yumurtanin sarisi atildi (yag azaltma).",
+ing:[["Yumurta (tam)","3 adet"],["Yumurta beyazi","1 adet (sariyi AT)"],["Volkoren brood","1 dilim"],["Domates","yarim adet (~50g)"],["Pisirme spreyi","2 puskurtme"],["Tuz, karabiber","birer tutam"]],
+steps:["4 yumurtayi kir: 3 tanesini tam kir (sari+beyaz). 4. yumurtayi bir kasede ayir — sadece BEYAZI al, sarisini cope at.","Catalla iyice cirp (30 sn, homojen olana kadar). Tuz + biber ekle.","Tavaya pisirme spreyi sik (2 puskurtme), ORTA ates (5/9). 10 sn bekle.","Yumurta karisimini tavaya dok. 30 sn DOKUNMA — alt tarafi pisinsin.","Kenarlari pisindiginde (kenarlar mat beyaz olur) spatula ile bir kenari katla. Veya sadece kaydirarak tabaga cikar. Toplam 2-3 dk. Icerisi HAFIF nemli kalsin.","Ekmegi kizart (tost veya kuru tava). Domatesi dilimle.","Tabaga omlet + ekmek + domates. Bitti!"],
+tips:["CUT: 4. yumurtanin SARISI = 5g yag, 45 kcal. Atarak protein kaybetmeden yag dusuruyorsun.","CUT: Pisirme spreyi 1 puskurtme = ~1g yag. Tereyagi veya olijfolie yerine bunu kullan."],warns:[]},
+
+cottage:{t:"Cottage Cheese + Salatalik",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:130,p:16,f:2,c:5,note:"",
+ing:[["AH cottage cheese","150g"],["Salatalik","yarim adet (~75g)"]],
+steps:["Cottage cheese'i tabaga/kaseye koy. Salataligi dilimle (~5mm), yanina koy. Ye."],tips:["En kolay cut snack. 130 kcal'de 16g protein."],warns:[]},
+
+kwark_bb:{t:"Kwark + Blueberry",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:175,p:28,f:1,c:13,note:"Bazi gunler 300g kwark (210 kcal, 33P) — plana bak.",
+ing:[["AH magere kwark","250g (terazide)"],["Blueberry (yabanmersini)","50g (terazide)"]],
+steps:["Terazide 250g kwark tart. 50g blueberry uzerine dok. Karistir veya karistirma, ye."],tips:["28g protein, 1g yag — cut icin IDEAL snack.","300g kwark versiyonu: 33g protein, 210 kcal."],warns:[]},
+
+kwark_wal:{t:"Kwark + Ceviz (CUT)",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:165,p:25,f:7,c:10,note:"CUT: ceviz 15g→10g. 5g fark = 3g yag = 27 kcal tasarruf.",
+ing:[["AH magere kwark","250g (terazide)"],["Ceviz (ongezouten walnoten)","10g (TERAZIDE! Fazla koyma!)"]],
+steps:["250g kwark tart. 10g ceviz (terazide — 10g, BIR AVUC DEGIL) uzerine koy. Ye."],tips:["10g ceviz = 6.5g yag. 15g ceviz = 10g yag. O 5g fark onemli!","Ceviz omega-3 icin iyi ama cut'ta yag = yag."],warns:[]},
+
+kwark_ek:{t:"Kwark Ek Porsiyon",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:92,p:17,f:0,c:8,note:"Protein ve kalori eksigini kapatmak icin ek porsiyon.",
+ing:[["AH magere kwark","200g (terazide)"]],
+steps:["200g kwark tart, ye. Bu kadar. Bal veya meyve ekleyebilirsin ama makrolari degisir."],tips:["Saf kwark 0g yag — cut'in en guvenli kalori kaynagi."],warns:[]},
+
+kwark_muz:{t:"Kwark + Muz",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:181,p:17,f:0,c:31,note:"",
+ing:[["AH magere kwark","200g (terazide)"],["Muz","1 adet (~120g)"]],
+steps:["200g kwark tart, muzu soy ve dilimle, karistir, ye."],tips:["0g yag, 17g protein + muzun karbonhidrati = enerji bombasi."],warns:[]},
+
+eggs_sn:{t:"Haslanmis Yumurta (2) + Salatalik",b:"Snack",bc:"#7F77DD",ct:"0 dk",kcal:155,p:13,f:10,c:1,note:"",
+ing:[["Haslanmis yumurta","2 adet"],["Salatalik","birkac dilim (~50g)"],["Tuz","bir tutam"]],
+steps:["Yumurtalari ONCEDEN toplu hasla (haftanin basinda 6 tane). Buzdolabinda kabuklu 5 gun dayanir.","2 tanesini soy, tuzla, salatalikla ye."],tips:["Hafta basinda 6 yumurta hasla = snack zamani 0 dk hazirlik."],warns:[]},
+
+eiwit:{t:"Eiwitbrood + Cottage Cheese",b:"Snack",bc:"#7F77DD",ct:"2 dk",kcal:215,p:22,f:4,c:16,note:"",
+ing:[["Jumbo eiwitbrood","2 dilim (~60g)"],["AH cottage cheese","100g"]],
+steps:["Ekmekleri kizart (tost makinesi veya kuru tava — yag ekleme).","Uzerine 100g cottage cheese sur/koy. Ye."],tips:["Eiwitbrood = 25g protein/100g ekmek, normal ekmekten 2.5 kat fazla."],warns:[]}
+};
+const EXTRAS=[{id:"x1",name:"Kwark (200g)",kcal:92,protein:17,fat:0,carbs:8},{id:"x2",name:"Yumurta (1)",kcal:78,protein:6,fat:5,carbs:0},{id:"x3",name:"Muz",kcal:89,protein:1,fat:0,carbs:23},{id:"x4",name:"Brood (1)",kcal:80,protein:3,fat:1,carbs:14},{id:"x5",name:"Eiwitbrood (1)",kcal:71,protein:8,fat:2,carbs:5},{id:"x6",name:"Kahve",kcal:2,protein:0,fat:0,carbs:0},{id:"x7",name:"Elma",kcal:72,protein:0,fat:0,carbs:19},{id:"x8",name:"Blueberry (50g)",kcal:29,protein:0,fat:0,carbs:7}];
+
+function gdk(d){return d.toISOString().split("T")[0]}
+function SVR({v,max,sz,sw,color}){const r=(sz-sw)/2,ci=2*Math.PI*r,p=Math.min(v/max,1.15),o=ci*(1-p);return React.createElement("svg",{width:sz,height:sz,style:{transform:"rotate(-90deg)"}},React.createElement("circle",{cx:sz/2,cy:sz/2,r,fill:"none",stroke:"#eee",strokeWidth:sw}),React.createElement("circle",{cx:sz/2,cy:sz/2,r,fill:"none",stroke:v>max?"#E24B4A":color,strokeWidth:sw,strokeDasharray:ci,strokeDashoffset:o,strokeLinecap:"round"}))}
+function Rng({v,max,sz=80,sw=6,color,val,unit}){return React.createElement("div",{className:"rw",style:{width:sz,height:sz}},React.createElement(SVR,{v,max,sz,sw,color}),React.createElement("div",{className:"rt"},React.createElement("div",{className:"rv "+(sz<70?"s":"b")},val),React.createElement("div",{className:"ru"},unit)))}
+
+function Modal({rid,onClose}){const r=R[rid];if(!r)return null;
+return React.createElement("div",{className:"modal-bg",onClick:e=>{if(e.target.className==="modal-bg")onClose()}},React.createElement("div",{className:"modal"},
+React.createElement("div",{className:"mh"},React.createElement("div",null,React.createElement("span",{className:"badge",style:{background:r.bc}},r.b)," ",React.createElement("span",{style:{fontSize:10,color:"#999"}},r.ct)),React.createElement("button",{className:"mclose",onClick:onClose},"x")),
+React.createElement("div",{className:"mt2"},r.t),
+React.createElement("div",{className:"ri"},
+React.createElement("div",{className:"rib"},React.createElement("div",{className:"riv"},r.kcal),React.createElement("div",{className:"ril"},"kcal")),
+React.createElement("div",{className:"rib"},React.createElement("div",{className:"riv",style:{color:"#185FA5"}},r.p+"g"),React.createElement("div",{className:"ril"},"protein")),
+React.createElement("div",{className:"rib"},React.createElement("div",{className:"riv",style:{color:"#BA7517"}},r.f+"g"),React.createElement("div",{className:"ril"},"yag")),
+React.createElement("div",{className:"rib"},React.createElement("div",{className:"riv",style:{color:"#534AB7"}},r.c+"g"),React.createElement("div",{className:"ril"},"karb"))),
+r.note&&React.createElement("div",{className:"cut-note"},r.note),
+React.createElement("div",{className:"ing-t"},"Malzemeler (1 porsiyon — terazide tart!)"),
+r.ing.map(function(x,i){return React.createElement("div",{key:i,className:"ing-r"},React.createElement("span",{className:"ing-n"},x[0]),React.createElement("span",{className:"ing-a"},x[1]))}),
+React.createElement("div",{className:"ing-t",style:{marginTop:12,marginBottom:8}},"Adim adim tarif"),
+r.steps.map(function(s,i){return React.createElement("div",{key:i,className:"stp"},React.createElement("div",{className:"stp-n"},i+1),React.createElement("div",{className:"stp-t"},s))}),
+r.tips.map(function(t,i){return React.createElement("div",{key:"t"+i,className:"tip"},t)}),
+r.warns.map(function(w,i){return React.createElement("div",{key:"w"+i,className:"wrn"},"DIKKAT: "+w)})
+))}
+
+function App(){
+const[eaten,setEaten]=useState({});const[extras,setExtras]=useState({});const[water,setWater]=useState({});
+const[view,setView]=useState("plan");const[selDate,setSelDate]=useState(gdk(new Date()));
+const[showCust,setShowCust]=useState(false);const[recipe,setRecipe]=useState(null);
+const[cn,sCn]=useState("");const[ck,sCk]=useState("");const[cp,sCp]=useState("");const[cf,sCf]=useState("");const[cc,sCc]=useState("");
+
+useEffect(function(){try{var d=JSON.parse(localStorage.getItem("cut-v6")||"{}");setEaten(d.e||{});setExtras(d.x||{});setWater(d.w||{});}catch(e){}},[]);
+var save=useCallback(function(e,x,w){setEaten(e);setExtras(x);setWater(w);try{localStorage.setItem("cut-v6",JSON.stringify({e:e,x:x,w:w}));}catch(er){}},[]);
+
+var today=gdk(new Date()),key=selDate,plan=PLAN[key]||[],dayEx=extras[key]||[],eIds=eaten[key]||[],dayW=water[key]||0;
+var isToday=key===today;
+var toggle=function(id){var d=eIds.includes(id)?eIds.filter(function(x){return x!==id}):[].concat(eIds,[id]);save(Object.assign({},eaten,{[key]:d}),extras,water);};
+var addEx=function(m){save(eaten,Object.assign({},extras,{[key]:[].concat(dayEx,[Object.assign({},m,{at:new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})})])}),water);};
+var rmEx=function(i){save(eaten,Object.assign({},extras,{[key]:dayEx.filter(function(_,j){return j!==i})}),water);};
+var addW=function(ml){var nw=Math.min(4000,dayW+ml);save(eaten,extras,Object.assign({},water,{[key]:nw}));};
+var subW=function(){var nw=Math.max(0,dayW-250);save(eaten,extras,Object.assign({},water,{[key]:nw}));};
+var addCust=function(){if(!cn||!ck)return;addEx({id:"c"+Date.now(),name:cn,kcal:+ck||0,protein:+cp||0,fat:+cf||0,carbs:+cc||0});sCn("");sCk("");sCp("");sCf("");sCc("");setShowCust(false);};
+
+var eM=plan.filter(function(m){return eIds.includes(m.id)});var all=[].concat(eM,dayEx);
+var t=all.reduce(function(a,m){return{kcal:a.kcal+m.kcal,protein:a.protein+m.protein,fat:a.fat+m.fat,carbs:a.carbs+m.carbs}},{kcal:0,protein:0,fat:0,carbs:0});
+var rem={kcal:G.kcal-t.kcal,protein:G.protein-t.protein};
+
+return React.createElement("div",null,
+recipe&&React.createElement(Modal,{rid:recipe,onClose:function(){setRecipe(null)}}),
+
+React.createElement("div",{className:"hdr"},React.createElement("div",null,React.createElement("div",{className:"hdr-sub"},"cut programi · 50g yag limit"),React.createElement("div",{className:"hdr-day"},DAYNAMES[key]||"Bugun",!isToday&&React.createElement("span",{className:"pbadge"},key.slice(5))),React.createElement("div",{className:"hdr-date"},isToday?"Bugun":"")),React.createElement("div",{className:"tabs"},React.createElement("button",{className:"tab"+(view==="plan"?" on":""),onClick:function(){setView("plan")}},"Program"),React.createElement("button",{className:"tab"+(view==="week"?" on":""),onClick:function(){setView("week")}},"Hafta"))),
+
+React.createElement("div",{className:"dnav"},DATES.map(function(k){var isS=k===key,isT=k===today,cnt=(eaten[k]||[]).length,tot=(PLAN[k]||[]).length;return React.createElement("div",{key:k,className:"dnav-i "+(isS?"sel":isT?"tring":"oth"),onClick:function(){setSelDate(k);setView("plan")}},DN[k],React.createElement("div",{className:"dnav-c"},cnt+"/"+tot))})),
+
+React.createElement("div",{className:"rings"},
+React.createElement(Rng,{v:t.kcal,max:G.kcal,color:"#1D9E75",val:Math.round(t.kcal),unit:"/"+G.kcal+" kcal"}),
+React.createElement(Rng,{v:t.protein,max:G.protein,sz:64,sw:5,color:"#185FA5",val:Math.round(t.protein)+"g",unit:"protein"}),
+React.createElement(Rng,{v:t.fat,max:G.fat,sz:64,sw:5,color:"#BA7517",val:Math.round(t.fat)+"g",unit:"/"+G.fat+"g yag"}),
+React.createElement(Rng,{v:t.carbs,max:G.carbs,sz:64,sw:5,color:"#534AB7",val:Math.round(t.carbs)+"g",unit:"karb"})),
+
+React.createElement("div",{className:"rem"},
+React.createElement("div",{className:"rb "+(rem.kcal>0?"rg":"rr")},React.createElement("div",{className:"rv2"},Math.round(rem.kcal)),React.createElement("div",{className:"rl"},"kcal kaldi")),
+React.createElement("div",{className:"rb "+(rem.protein>0?"rbl":"rg")},React.createElement("div",{className:"rv2"},Math.round(rem.protein)+"g"),React.createElement("div",{className:"rl"},"protein kaldi"))),
+
+React.createElement("div",{className:"water-bar"},
+React.createElement("div",{className:"water-btns"},
+React.createElement("button",{className:"water-btn",onClick:function(){subW()}},"-"),
+React.createElement("button",{className:"water-btn",onClick:function(){addW(250)}},"+"),
+React.createElement("button",{className:"water-btn",onClick:function(){addW(500)},style:{fontSize:10}},"+5")),
+React.createElement("div",{className:"water-track"},React.createElement("div",{className:"water-fill",style:{width:Math.min(100,dayW/2500*100)+"%"}})),
+React.createElement("div",{className:"water-txt"},Math.round(dayW/1000*10)/10+"L / 2.5L")),
+
+view==="plan"&&React.createElement("div",null,
+plan.length>0?React.createElement("div",null,
+React.createElement("div",{className:"stit"},(DAYNAMES[key]||"")+" ("+eIds.length+"/"+plan.length+" yendi)"),
+plan.map(function(m){var done=eIds.includes(m.id),cls=m.slot[0],rk=RCP[m.id];return React.createElement("div",{key:m.id,className:"ml "+cls+(done?" dn":"")},
+React.createElement("div",{className:"ck"+(done?" on":""),onClick:function(){toggle(m.id)}},done?"\u2713":""),
+React.createElement("div",{className:"mi",onClick:function(){if(rk)setRecipe(rk)}},
+React.createElement("div",{className:"ms"},m.slot),
+React.createElement("div",{className:"mn",style:done?{textDecoration:"line-through"}:{}},m.name),
+m.time&&React.createElement("div",{className:"mt"},m.time+(rk?" \u2014 tarif icin tikla":""))),
+React.createElement("div",{className:"mm"},React.createElement("div",{className:"mk"},m.kcal),React.createElement("div",{className:"mp"},m.protein+"P \u00b7 "+m.fat+"Y \u00b7 "+m.carbs+"K")),
+rk&&React.createElement("button",{className:"ib",onClick:function(e){e.stopPropagation();setRecipe(rk)}},"?")
+)})):React.createElement("div",{style:{padding:20,textAlign:"center",background:"#fff",borderRadius:12}},React.createElement("div",{style:{fontWeight:700}},"Bu gun icin plan yok")),
+
+dayEx.length>0&&React.createElement("div",{style:{marginTop:10}},React.createElement("div",{className:"stit"},"Plan disi yenenler"),dayEx.map(function(m,i){return React.createElement("div",{key:i,className:"xi"},React.createElement("div",{style:{flex:1}},React.createElement("strong",null,m.name)," ",React.createElement("span",{style:{color:"#bbb",fontSize:9}},m.at)),React.createElement("span",{style:{fontWeight:700,fontSize:11}},m.kcal),React.createElement("span",{style:{color:"#185FA5",fontSize:9,marginLeft:4}},m.protein+"P"),React.createElement("button",{className:"xr",onClick:function(){rmEx(i)}},"x"))})),
+
+React.createElement("div",{className:"ep"},
+React.createElement("div",{style:{fontSize:11,fontWeight:700,color:"#999",marginBottom:5}},"Plan disi yedin mi?"),
+React.createElement("div",{className:"qb"},EXTRAS.map(function(m){return React.createElement("button",{key:m.id,className:"qn",onClick:function(){addEx(m)}},m.name," (",m.kcal,")")})),
+React.createElement("button",{className:"cb",onClick:function(){setShowCust(!showCust)}},showCust?"Kapat":"Ozel ekle"),
+showCust&&React.createElement("div",{className:"cf"},
+React.createElement("input",{className:"fw",placeholder:"Isim",value:cn,onChange:function(e){sCn(e.target.value)}}),
+React.createElement("input",{placeholder:"Kcal",type:"number",value:ck,onChange:function(e){sCk(e.target.value)}}),
+React.createElement("input",{placeholder:"Protein",type:"number",value:cp,onChange:function(e){sCp(e.target.value)}}),
+React.createElement("input",{placeholder:"Yag",type:"number",value:cf,onChange:function(e){sCf(e.target.value)}}),
+React.createElement("input",{placeholder:"Karb",type:"number",value:cc,onChange:function(e){sCc(e.target.value)}}),
+React.createElement("button",{className:"cs",onClick:addCust},"Ekle")))
+),
+
+view==="week"&&React.createElement("div",null,DATES.map(function(k){
+var dei=eaten[k]||[],dex=extras[k]||[],dp=PLAN[k]||[];
+var em=dp.filter(function(m){return dei.includes(m.id)});var al=[].concat(em,dex);
+var dt=al.reduce(function(a,m){return{kcal:a.kcal+m.kcal,protein:a.protein+m.protein,fat:a.fat+m.fat,carbs:a.carbs+m.carbs}},{kcal:0,protein:0,fat:0,carbs:0});
+var pt=dp.reduce(function(a,m){return{kcal:a.kcal+m.kcal,protein:a.protein+m.protein,fat:a.fat+m.fat}},{kcal:0,protein:0,fat:0});
+var isT=k===today;
+return React.createElement("div",{key:k,className:"wc"+(isT?" wt":""),onClick:function(){setSelDate(k);setView("plan")}},
+React.createElement("div",{style:{display:"flex",justifyContent:"space-between",marginBottom:2}},
+React.createElement("span",{style:{fontSize:13,fontWeight:700}},DAYNAMES[k],isT?" (bugun)":""),
+React.createElement("span",{style:{fontSize:11}},dei.length,"/",dp.length)),
+React.createElement("div",{style:{display:"flex",gap:10,fontSize:11,color:"#999",marginBottom:3}},
+React.createElement("span",null,"Yenen: ",React.createElement("strong",{style:{color:"#1a1a1a"}},Math.round(dt.kcal))," kcal"),
+React.createElement("span",{style:{color:"#185FA5"}},Math.round(dt.protein)+"P"),
+React.createElement("span",{style:{color:dt.fat>G.fat?"#A32D2D":"#BA7517",fontWeight:dt.fat>G.fat?700:400}},Math.round(dt.fat)+"Y")),
+React.createElement("div",{className:"wb"},React.createElement("div",{className:"wf",style:{width:Math.min(100,dt.kcal/G.kcal*100)+"%",background:dt.kcal<=G.kcal?"#1D9E75":"#E24B4A"}})),
+React.createElement("div",{style:{fontSize:9,color:"#ccc",marginTop:2}},"Plan: "+pt.kcal+" kcal \u00b7 "+pt.protein+"P \u00b7 "+pt.fat+"Y"))})),
+
+React.createElement("div",{className:"ft"},
+"Hedef: ",G.kcal," kcal \u00b7 ",G.protein,"g P \u00b7 ",G.fat,"g Y \u00b7 ",G.carbs,"g K",
+React.createElement("br",null),"Cut: 87kg \u2192 80kg \u00b7 BMR 1969 kcal \u00b7 Deficit ~400-500 kcal/gun")
+);}
+
+ReactDOM.render(React.createElement(App),document.getElementById("app"));
+</script>
+</body>
+</html>
