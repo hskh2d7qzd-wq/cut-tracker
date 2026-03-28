@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Cut Program — 28 Mar → 4 Nis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue','Segoe UI',sans-serif;background:#0A0A0A;color:#E8E6E0;-webkit-tap-highlight-color:transparent}
+#root{max-width:480px;margin:0 auto;min-height:100vh}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+var e=React.createElement,us=React.useState,ue=React.useEffect;
+var GOALS={kcal:1500,protein:150,carbs:150,fat:33};
+var SUPPS={
+sabah:[
+{name:"Supradyn Complex Forte",dose:"1 tablet",note:"B vit + CoQ10",icon:"\uD83D\uDC8A"},
+{name:"Lucovitaal D3+K2",dose:"2 kaps\u00FCl",note:"1600 IU D3 + 150mcg K2",icon:"\u2600\uFE0F"},
+{name:"Kruidvat Selenium Zink",dose:"1 tablet",note:"Zn 15mg + Se 82.5mcg",icon:"\u26A1"},
+{name:"Omega-3 Visolie",dose:"2 kaps\u00FCl",note:"EPA 360 + DHA 240",icon:"\uD83D\uDC1F"},
+{name:"Ashwagandha KSM-66",dose:"1 kaps\u00FCl",note:"Kortizol \u2193 Testo \u2191",icon:"\uD83C\uDF3F"}
+],
+aksam:[
+{name:"AH Magnesium+B6",dose:"2 tablet",note:"400mg Mg bisglisinat",icon:"\uD83C\uDF19"},
+{name:"Omega-3 Visolie",dose:"1 kaps\u00FCl",note:"EPA 180 + DHA 120",icon:"\uD83D\uDC1F"},
+{name:"Ashwagandha KSM-66",dose:"1 kaps\u00FCl",note:"Uyku \u00F6ncesi kortizol",icon:"\uD83C\uDF3F"},
+{name:"Boron",dose:"1 tablet",note:"6mg \u2014 SHBG \u2193 Free T \u2191",icon:"\uD83D\uDC8E"}
+]
+};
+var DAYS=[
+{date:"2026-03-28",label:"Cmt 28 Mar",tag:"HF AC\u0130L",tagColor:"#E24B4A",meals:[
+{slot:"Kahvalt\u0131",name:"Kwark (250g) + salatal\u0131k (50g)",p:21,c:10,f:0,kcal:123},
+{slot:"\u00D6\u011Fle",name:"Bulgogi bowl CUT (\u00BD pirin\u00E7, 17g sos, sprey)",p:45,c:55,f:18,kcal:600},
+{slot:"Snack",name:"Kwark (300g) + volkoren brood (1 dilim)",p:27,c:24,f:1,kcal:208},
+{slot:"Ak\u015Fam",name:"Rosemary chicken CUT (sprey, \u00BD sos, \u00BD pirin\u00E7)",p:41,c:45,f:15,kcal:530}
+]},
+{date:"2026-03-29",label:"Paz 29 Mar",tag:"HF AC\u0130L",tagColor:"#E24B4A",meals:[
+{slot:"Kahvalt\u0131",name:"Yulaf (50g) + kwark (200g) + \u00BD muz",p:25,c:45,f:4,kcal:310},
+{slot:"\u00D6\u011Fle",name:"Steak potato salad CUT (sprey, \u00BD mayo)",p:31,c:45,f:18,kcal:480},
+{slot:"Snack",name:"Kwark (250g) + salatal\u0131k",p:21,c:10,f:0,kcal:123},
+{slot:"Ak\u015Fam",name:"Steak potato salad CUT #2",p:31,c:45,f:18,kcal:480}
+]},
+{date:"2026-03-30",label:"Pzt 30 Mar",tag:"CLEAN",tagColor:"#1D9E75",meals:[
+{slot:"Kahvalt\u0131",name:"Yulaf (70g) + kwark (250g) + muz + bal (10g)",p:30,c:76,f:5,kcal:450},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 3 beyaz) + volkoren brood (2 dilim)",p:38,c:24,f:13,kcal:349},
+{slot:"Snack",name:"Kwark (300g) + blueberry (50g)",p:26,c:15,f:0,kcal:161},
+{slot:"Ak\u015Fam",name:"Cottage cheese (200g) + volkoren brood (2) + 3 yumurta beyaz\u0131",p:46,c:26,f:5,kcal:355},
+{slot:"Snack 2",name:"Volkoren brood (1) + kwark (100g)",p:12,c:22,f:1,kcal:146}
+]},
+{date:"2026-03-31",label:"Sal 31 Mar",tag:"CLEAN",tagColor:"#1D9E75",meals:[
+{slot:"Kahvalt\u0131",name:"Overnight oats (yulaf 65g + s\u00FCt 200ml + kwark 200g)",p:32,c:60,f:8,kcal:423},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 2 beyaz) + volkoren brood (2 dilim)",p:32,c:26,f:12,kcal:370},
+{slot:"Snack",name:"Kwark (300g) + volkoren brood (1 dilim)",p:27,c:24,f:1,kcal:208},
+{slot:"Ak\u015Fam",name:"Kwark (350g) + muz (\u00BD) + yulaf (30g)",p:32,c:40,f:2,kcal:310},
+{slot:"Snack 2",name:"Ha\u015Flanm\u0131\u015F yumurta (2) + salatal\u0131k",p:13,c:1,f:10,kcal:155}
+]},
+{date:"2026-04-01",label:"\u00C7ar 1 Nis",tag:"CLEAN",tagColor:"#1D9E75",meals:[
+{slot:"Kahvalt\u0131",name:"Yulaf (70g) + kwark (250g) + muz + bal (10g)",p:30,c:76,f:5,kcal:450},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 3 beyaz) + volkoren brood (2 dilim)",p:38,c:24,f:13,kcal:349},
+{slot:"Snack",name:"Kwark (250g) + salatal\u0131k",p:21,c:10,f:0,kcal:123},
+{slot:"Ak\u015Fam",name:"Cottage cheese (200g) + volkoren brood (2) + 3 yumurta beyaz\u0131",p:46,c:26,f:5,kcal:355},
+{slot:"Snack 2",name:"Volkoren brood (1) + kwark (100g)",p:12,c:22,f:1,kcal:146}
+]},
+{date:"2026-04-02",label:"Per 2 Nis",tag:"CLEAN",tagColor:"#1D9E75",meals:[
+{slot:"Kahvalt\u0131",name:"Overnight oats (yulaf 65g + s\u00FCt 200ml + kwark 200g)",p:32,c:60,f:8,kcal:423},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 2 beyaz) + volkoren brood (2 dilim)",p:27,c:26,f:12,kcal:320},
+{slot:"Snack",name:"Kwark (300g) + blueberry (50g)",p:26,c:15,f:0,kcal:161},
+{slot:"Ak\u015Fam",name:"Ha\u015Flanm\u0131\u015F yumurta (3) + volkoren brood (2) + cottage cheese (150g)",p:40,c:28,f:16,kcal:430}
+]},
+{date:"2026-04-03",label:"Cum 3 Nis",tag:"CLEAN",tagColor:"#1D9E75",meals:[
+{slot:"Kahvalt\u0131",name:"Yulaf (70g) + kwark (250g) + muz + bal (10g)",p:30,c:76,f:5,kcal:450},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 3 beyaz) + volkoren brood (2 dilim)",p:38,c:24,f:13,kcal:349},
+{slot:"Snack",name:"Cottage cheese (150g) + salatal\u0131k",p:16,c:5,f:2,kcal:130},
+{slot:"Ak\u015Fam",name:"Kwark (350g) + volkoren brood (2) + 2 yumurta beyaz\u0131",p:41,c:38,f:2,kcal:335},
+{slot:"Snack 2",name:"Volkoren brood (1) + kwark (100g)",p:12,c:22,f:1,kcal:146}
+]},
+{date:"2026-04-04",label:"Cmt 4 Nis",tag:"SON G\u00DCN",tagColor:"#534AB7",meals:[
+{slot:"Kahvalt\u0131",name:"Overnight oats (yulaf 65g + s\u00FCt 200ml + kwark 200g)",p:32,c:60,f:8,kcal:423},
+{slot:"\u00D6\u011Fle",name:"Omlet (2 tam + 3 beyaz) + volkoren brood (2 dilim)",p:38,c:24,f:13,kcal:349},
+{slot:"Snack",name:"Kwark (250g) + blueberry (50g)",p:23,c:14,f:0,kcal:150},
+{slot:"Ak\u015Fam",name:"Cottage cheese (200g) + volkoren brood (2) + 3 yumurta beyaz\u0131",p:42,c:28,f:5,kcal:335},
+{slot:"Snack 2",name:"Kwark (150g) + salatal\u0131k",p:13,c:7,f:0,kcal:78}
+]}
+];
+
+var RECIPES={
+"Bulgogi bowl CUT":{time:"15 dk",diff:"Kolay",
+ingredients:[
+{item:"Biftek seritleri (ana paketin yarisi)",g:"100g"},
+{item:"Extra steak seritleri",g:"tamami (~110g)"},
+{item:"Jasmine pirinc (paketin YARISI)",g:"75g"},
+{item:"Bulgogi sosu (paketin CEYREGI!)",g:"17g"},
+{item:"Soya sosu (paketin yarisi)",g:"12g"},
+{item:"Lahana-havuc karisimi (yarisi)",g:"75g"},
+{item:"Salatalik",g:"75g (yarim adet)"},
+{item:"Sarimsak",g:"3g (yarim dis)"},
+{item:"Kizarmis fistik (yarisi)",g:"10g"},
+{item:"Bal-zencefil dressing (yarisi)",g:"12g"},
+{item:"Pisirme spreyi",g:"1 sn sikim"},
+{item:"Su (pirinc icin)",g:"300g"}
+],
+steps:[
+"HAZIRLIK \u2014 Teraziyi tezgaha koy. Bos bir kase koy, sifirla. Ana biftek paketini ac, 100g tart, kaseye koy. Kalan 100g'i strec filmle sar, buzdolabina koy. Extra steak paketinin TAMAMINI da ayni kaseye ekle.",
+"MARINE \u2014 Ayni kaseye terazide 17g bulgogi sosu tart (paketin ceyregi! geri kalani buzdolabina). 12g soya sosu ekle. Yarim dis sarimsagi soy, avucuna koy, bicagin yassi tarafiyla ustune bas (ezilecek), kaseye at. Kasikla 10 saniye karistir. Kaseyi tezgahta birak, marine olsun.",
+"PIRINC \u2014 Tencereye 300g su koy (terazide tart). Ocagin altini ac, atesi ORTA yap. Su fokur fokur kaynamaya baslayinca (3-4 dk) 75g pirinci (terazide tart!) suya dok. Kasikla TAM 1 KERE karistir. Atesi EN DUSUGE cevir. Tencerenin kapagini koy. Telefonunda 12 DAKIKA zamanlayici kur. BU 12 DAKIKA BOYUNCA KAPAGA DOKUNMA, ACMA, KARISTIRMA.",
+"SALATA (pirinc piserken yap) \u2014 Salataligi kesme tahtasina koy. Bicakla uzunlamasina ortadan kes, sonra yarim ay seklinde 3-4mm kalinliginda dilimle. Baska bir kaseye 75g lahana-havuc karisimi tart, salatalik dilimlerini ekle. Ustune 5g elma sirkesi (1 tatli kasigi) + bir tutam tuz + bir tutam seker dok. Kasikla karistir, kenara koy.",
+"ET PISIR (pirinc zamanlayicisi 5. dakikada basla) \u2014 Tavayi ocaga koy, atesi ORTA-YUKSEK yap. Pisirme spreyini tavaya 1 saniye sik. 30 saniye bekle (tava isinsin). Marine kaseyi al, eti SOSUYLA BIRLIKTE tavaya dok. DIKKAT: eti kendinden OTE tarafa birak, yag sicramasin. Spatula ile 5-6 dakika boyunca arada cevir. Et tamamen kahverengiye donmeli, HIC pembe kalmayacak.",
+"PIRINC KONTROL \u2014 12 dk doldu mu? Kapagi ac. Kasikla 1 tane pirinc al, agzinda dene. Yumusaksa tamam. Sertse 2 dk daha bekle. Tamam olunca: tencerenin kapagini hafif aralik tut, lavaboya eg, suyunu suz. Atesi kapat.",
+"TABAKLA \u2014 Derin tabaga pirinci koy. Yanina eti sosuyla birlikte yerlestir. Diger tarafa lahana-havuc-salatalik salatasini koy. Terazide 12g bal-zencefil dressingi tart, etin ustune gezdir. 10g kizarmis fistigi tart, ustune serpistir."
+],cut_notes:"Bulgogi sosu 17g = ceyrek paket. Tam dokersen +150 kcal seker. Mayo ATLA. Pirinc yarim paket. Yag yerine SPREY."},
+
+"Rosemary chicken CUT":{time:"30 dk",diff:"Orta",
+ingredients:[
+{item:"Tavuk gogsu fileto (paketten)",g:"~150g"},
+{item:"Un (bloem)",g:"10g"},
+{item:"Paprika baharat (paket baharat)",g:"paket yarisi"},
+{item:"Biberiye (rozemarijn \u2014 paketten)",g:"2-3 dal"},
+{item:"Jasmine pirinc (paketin yarisi)",g:"75g"},
+{item:"Paprika (sebze \u2014 kirmizi/sari biber)",g:"~100g (yarisi)"},
+{item:"Bezelye / seker bezelye (paketten)",g:"~75g (yarisi)"},
+{item:"Groentebouillon (sebze bulyon)",g:"1 blokje + 150g su"},
+{item:"Balsamico sirke",g:"10g"},
+{item:"Pisirme spreyi",g:"2 sn sikim"},
+{item:"Tuz",g:"2g"},
+{item:"Karabiber",g:"1g"},
+{item:"Su (pirinc icin)",g:"300g"}
+],
+steps:[
+"HAZIRLIK \u2014 Tavugu paketten cikar, kesme tahtasina koy. Eger kalin parcaysa (3cm den kalin): bicakla yatay olarak ortadan kes, iki ince fileto yap. Bu hem daha hizli piser hem daha lezzetli olur. Duz bir tabaga 10g un (terazide tart) + paket baharatinin yarisini dok, kasikla karistir.",
+"TAVUGU KAPLA \u2014 Her tavuk parcasini unlu tabaga koy, iki tarafini una bula. Elinle hafifce bastir ki un yapissin. Tum parcalari kapla, kenara koy.",
+"PIRINC \u2014 Tencereye 300g su koy. Kaynat (3-4 dk). 75g pirinc ekle (terazide tart). 1 kez karistir, atesi EN DUSUGE cevir, kapagi koy. 12 dk zamanlayici kur. DOKUNMA.",
+"TAVUGU PISIR \u2014 TAVADA, FIRINDA DEGIL! Genis tavayi ocaga koy, atesi ORTA yap. Pisirme spreyini 2 saniye sik. 30 sn bekle. Unlu tavuk parcalarini tavaya koy. DIKKAT: tavugu koyduktan sonra 3 DAKIKA HIC DOKUNMA. 3 dk sonra spatula ile cevir (alti guzel altin rengi olmali). Diger tarafi da 3 DAKIKA pisir. Biberiye dallarini tavugun yanina at, 1 dk daha beraber pisir. Tavugu tabaga al.",
+"TAVUK PISTI MI KONTROL \u2014 En kalin yerinden bicakla kes, icine bak. TAMAMEN BEYAZ olmali. Pembe varsa tavaya geri koy, 2 dk daha pisir. Tavuk CIG YENMEZ, bu adimi ATLAMA.",
+"SEBZE (ayni tavada) \u2014 Tavugu cikardigin tavayi temizleme, ayni tavada devam et. 1 sn sprey sik. Paprikayi (kirmizi/sari biber) serit serit kes (1cm genisliginde). Tavaya at. ORTA ateste 3 dk kavur, arada karistir. Bezelyeleri ekle, 2 dk daha kavur.",
+"SOS (ayni tavada) \u2014 1 bulyon blokjesini 150g sicak suda erit (bardakta kasikla karistir, blogu parcala). Sebzelerin ustune dok. 10g balsamico sirke ekle. 2-3 dk kaynat, sos biraz koyulassin. Tuz + karabiber ekle.",
+"TABAKLA \u2014 Tabaga pirinci koy. Yanina sebzeleri sosla birlikte koy. Ustune tavuk parcalarini yerlestir."
+],cut_notes:"TAVADA pisir, firin yok. Tereyagi YOK \u2014 sprey kullan. Sos yarimla. Pirinc yarim paket. Un sadece 10g kaplama icin."},
+
+"Steak potato salad CUT":{time:"25 dk",diff:"Orta",
+ingredients:[
+{item:"Steak (biftek \u2014 paketten)",g:"~150g"},
+{item:"Patates (paketten, kucuk)",g:"~200g (yarisi)"},
+{item:"Sperziebonen (taze fasulye)",g:"~75g (yarisi)"},
+{item:"Dereotu (dille \u2014 paketten)",g:"yarim demet"},
+{item:"Hardal (mosterd)",g:"6g"},
+{item:"Mayonez",g:"7g"},
+{item:"Sirke (beyaz veya elma)",g:"10g"},
+{item:"Pisirme spreyi",g:"1 sn sikim"},
+{item:"Tuz",g:"3g"},
+{item:"Karabiber",g:"1g"},
+{item:"Su (patates icin)",g:"tencere dolusu"}
+],
+steps:[
+"PATATES \u2014 Patatesleri yika (soyma, kabuguyla pisir). Buyukse bicakla ikiye kes. Tencereye bol su koy + 3g tuz. Kaynamasini bekle. Patatesleri suya koy. 15 dakika zamanlayici kur. ORTA ates.",
+"FASULYE (patates piserken hazirla) \u2014 Fasulyelerin iki ucundaki sert kismi parmakinla kopar at (her iki ucundan 5mm). Patatesin zamanlayicisi 10. dakikada: fasulyeleri ayni tencereye patateslerin yanina at. 5 dk beraber pissinler.",
+"PATATES PISTI MI \u2014 15 dk doldu. Catali en buyuk patatese batir. Kolayca giriyorsa pismis. Girmiyorsa 3 dk daha bekle. Tencerenin kapagini aralik tutarak suyunu suz. Patatesleri tencerede 2 dk sogumaya birak.",
+"STEAK (patates sogurken) \u2014 Steaki paketten cikar, kagit havluyla iki tarafini kurula (kuru et daha iyi piser). Tuz + karabiber serp, iki tarafina. Tavayi ocaga koy, atesi YUKSEK yap. 1 sn pisirme spreyi sik. Tava dumanlamaya baslayinca (30-40 sn) steaki tavaya koy. 3 DAKIKA DOKUNMA. 3 dk sonra spatula ile cevir. Diger tarafi da 3 DAKIKA. Tabaga al, 3 dk DINLENDIR (kesme, dokunma \u2014 etler dinlenirken suyu icine ceker).",
+"DRESSING \u2014 Kucuk bir kaseye koy: terazide 7g mayonez + 6g hardal + 10g sirke. Dereotunun yarisini makas ile ince ince kes kaseye. Kasikla karistir.",
+"TABAKLA \u2014 Patatesleri tabaga koy, catalla hafifce ez (tam ezmeden, kaba parcalar kalsin). Yanina fasulyeleri koy. Dressingi ustune gezdir. Steaki bicakla serit serit kes (parmak kalinliginda, 1cm). Patateslerin ustune diz. Kalan dereotunu ustune serpistir."
+],cut_notes:"Mayo 7g = terazide tart, goz karari YAPMA. Tereyagi YOK \u2014 sprey. Patatesin yarisini kullan."},
+
+"Omlet (cut versiyon)":{time:"8 dk",diff:"Kolay",
+ingredients:[
+{item:"Yumurta (tam)",g:"2 adet (~120g)"},
+{item:"Yumurta beyazi (sarisiz)",g:"3 adet (~100g beyaz)"},
+{item:"Tuz",g:"1g"},
+{item:"Karabiber",g:"0.5g"},
+{item:"Pisirme spreyi",g:"1 sn sikim"}
+],
+steps:[
+"YUMURTA BEYAZI AYIRMA \u2014 Yumurtayi tezgaha hafifce vur, ortadan ikiye kir. Kabugun iki yarisini asagiya dogru tut. Sariyi bir kabuk yarisindan digerine aktar (hafifce devir), beyaz kisim alttaki kaseye akacak. Sariyi ayri bir kaba koy (at veya ertesi gun tam yumurta olarak kullan). Bunu 3 yumurta icin tekrarla. Sonra 2 yumurtayi tam olarak (sari+beyaz) ayni kaseye kir.",
+"CIRP \u2014 Kaseye 1g tuz + 0.5g karabiber ekle. Catal ile 20 saniye hizlica cirp. Tamamen karisana kadar.",
+"PISIR \u2014 Tavayi ocaga koy, atesi TAM ORTA yap (ne dusuk ne yuksek). Pisirme spreyini 1 sn sik. 20 saniye bekle. Yumurta karisimini tavaya dok. ILK 30 SANIYE HIC DOKUNMA. Sonra spatula ile kenarlari ortaya dogru itele. Ustu hala hafif sulu iken tavayi eg, sulu kisim kenara aksin. Toplam 2-3 dk.",
+"KATLA \u2014 Spatula ile omletin bir kenarini kaldir, diger kenarin ustune katla (yarim ay sekli). 10 sn daha bekle. Tabaga kaydir."
+],cut_notes:"3 beyaz = ekstra 10g protein, 0g yag. Yag yerine sprey. Icine peynir/sebze EKLEME \u2014 fazla kalori."},
+
+"Overnight oats":{time:"0 dk (onceki gece)",diff:"Cok Kolay",
+ingredients:[
+{item:"Yulaf ezmesi (havermout)",g:"65g"},
+{item:"Halfvolle melk (sut)",g:"200g"},
+{item:"AH Magere kwark",g:"200g"}
+],
+steps:[
+"ONCEKI GECE \u2014 Kavanoz veya derin kaseye teraziyle tart: 65g yulaf ezmesi, ustune 200g sut. Kasikla 15 saniye karistir. Ustunu strec filmle kapa veya kavanozun kapagini koy. Buzdolabina koy. Yat uyu.",
+"SABAH \u2014 Buzdolabindan cikar. Ustune 200g kwark (terazide tart) ekle. Kasikla karistir. Hemen ye \u2014 isitmana gerek yok, soguk yenir."
+],cut_notes:"Meyve istersen SABAH ekle, onceki gece degil (yumusar). Bal EKLEME \u2014 gereksiz kalori. Ekstra kwark = daha cok protein."},
+
+"Yulaf + kwark + muz":{time:"5 dk",diff:"Cok Kolay",
+ingredients:[
+{item:"Yulaf ezmesi (havermout)",g:"70g"},
+{item:"AH Magere kwark",g:"250g"},
+{item:"Muz",g:"1 adet (~120g)"},
+{item:"Bal (sivi)",g:"10g"}
+],
+steps:[
+"Kaseye 70g yulaf ezmesi tart. Ustune 250g kwark tart. Kasikla karistir (kuru yulaf + kwark karisacak, kivam yogurt gibi olacak).",
+"Muzu soy, kesme tahtasina koy, bicakla 5mm kalinliginda yuvarlak dilimle. Kasenin ustune diz.",
+"10g bal tart, ustune gezdir. Ye."
+],cut_notes:"Bal 10g = TAM 10g, daha fazla koyma (her 10g = 30 kcal). Muz 1 taneden fazla KOYMA."},
+
+"Kwark + blueberry":{time:"1 dk",diff:"Cok Kolay",
+ingredients:[{item:"AH Magere kwark",g:"250-300g"},{item:"Blueberry (yabanmersini)",g:"50g"}],
+steps:["Kaseye kwarki tart (250g veya 300g \u2014 plana bak). Ustune 50g blueberry dok. Karistir veya karistirma, sana kalmis. Ye."],
+cut_notes:"Blueberry 50g dan FAZLA koyma. Seker/bal EKLEME."},
+
+"Cottage cheese + salatalik":{time:"1 dk",diff:"Cok Kolay",
+ingredients:[{item:"AH cottage cheese",g:"150-200g"},{item:"Salatalik",g:"50-75g"}],
+steps:["Cottage cheese i tabaga koy (terazide tart). Salataligi yika, bicakla 3-4mm kalinliginda yuvarlak dilimle. Yanina koy. Bir tutam tuz istersen serp. Ye."],
+cut_notes:"130 kcal de 16g protein \u2014 rakipsiz cut snack."},
+
+"Kwark + volkoren brood":{time:"2 dk",diff:"Cok Kolay",
+ingredients:[{item:"AH Magere kwark",g:"300g"},{item:"Volkoren brood",g:"1 dilim (~35g)"}],
+steps:["Kaseye 300g kwark tart. 1 dilim volkoren broodu kizart (tosterda veya kuru tavada 1 dk her taraf). Kwarki kasikla ye, ekmeyi yaninda ye veya ustune kwark sur."],
+cut_notes:"300g kwark = 25g protein. Ekmek ustune tereyagi SURME."},
+
+"Haslanmis yumurta":{time:"12 dk",diff:"Cok Kolay",
+ingredients:[{item:"Yumurta",g:"2-3 adet"},{item:"Salatalik (yanina)",g:"50g"},{item:"Tuz",g:"1g"}],
+steps:[
+"IPUCU: Hafta basinda 6 yumurtayi TOPLU hasla. Buzdolabinda 5 gun dayanir. Snack zamani 0 dk hazirlik.",
+"Tencereye bol su koy, kaynat. Yumurtalari kasikla YAVASCA suya koy (dusurme, catlar). 10 dakika zamanlayici kur (sert haslanmis icin). 8 dk = sarisi biraz yumusak.",
+"10 dk dolunca: tencereyi lavaboya gotur, sicak suyu bosalt, soguk su doldur. 2 dk sogusun. Yumurtalari soy (kabugu tezgaha hafifce vur, yuvarla, kabuk kolayca cikar). Tuzla. Salatalikla beraber ye."
+],cut_notes:"Her yumurta = 6g protein, 5g yag. Toplu hasla, hafta boyu kullan."},
+
+"Kwark + ceviz":{time:"1 dk",diff:"Cok Kolay",
+ingredients:[{item:"AH Magere kwark",g:"200g"},{item:"Ceviz (kabuzsuz)",g:"15g"}],
+steps:["200g kwark tart. 15g ceviz tart \u2014 TERAZIDE! Ceviz kalori bombasidir, 15g = 98 kcal. Goz karari koyarsan 30-40g koyarsin, +200 kcal fazla yersin. Kwarkin ustune dok, karistir, ye."],
+cut_notes:"15g ceviz = 98 kcal, 9g yag. ASLA goz karari koyma."},
+
+"Volkoren brood + kwark":{time:"1 dk",diff:"Cok Kolay",
+ingredients:[{item:"Volkoren brood (tam bugday)",g:"1 dilim (~35g)"},{item:"AH Magere kwark",g:"100g"}],
+steps:["1 dilim ekmeyi tabaga koy (kizartabilirsin ama sart degil). Ustune 100g kwark tart, kasikla sur. Ye."],
+cut_notes:"Basit ama etkili snack. Ustune bal/recel EKLEME."}
+};
+
+var slotColors={"Kahvalt\u0131":"#EF9F27","\u00D6\u011Fle":"#1D9E75","Snack":"#7F77DD","Ak\u015Fam":"#378ADD","Snack 2":"#D4537E"};
+var font="'JetBrains Mono','SF Mono','Fira Code',monospace";
+var KEY="cut-prog-v4";
+
+function loadState(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(x){return{}}}
+function saveState(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(x){}}
+
+function pct(v,g){return Math.min(Math.round(v/g*100),100)}
+
+function App(){
+var _e=us({}),eaten=_e[0],setEaten=_e[1];
+var _s=us({}),suppsDone=_s[0],setSuppsDone=_s[1];
+var _v=us("plan"),view=_v[0],setView=_v[1];
+var _d=us(0),sel=_d[0],setSel=_d[1];
+var _r=us(null),openR=_r[0],setOpenR=_r[1];
+
+ue(function(){
+var s=loadState();if(s.eaten)setEaten(s.eaten);if(s.supps)setSuppsDone(s.supps);
+var t=new Date().toISOString().slice(0,10);
+var i=DAYS.findIndex(function(d){return d.date===t});
+if(i>=0)setSel(i);
+},[]);
+
+ue(function(){saveState({eaten:eaten,supps:suppsDone})},[eaten,suppsDone]);
+
+function toggleEat(di,mi){var k=di+"-"+mi;setEaten(function(p){var n=Object.assign({},p);n[k]=!n[k];return n})}
+function toggleSupp(period,i){var t=new Date().toISOString().slice(0,10);var k=t+"-"+period+"-"+i;setSuppsDone(function(p){return Object.assign({},p,function(){var o={};o[k]=!p[k];return o}())})}
+
+var day=DAYS[sel];
+var dt=day.meals.reduce(function(a,m){return{kcal:a.kcal+m.kcal,p:a.p+m.p,c:a.c+m.c,f:a.f+m.f}},{kcal:0,p:0,c:0,f:0});
+var et=day.meals.reduce(function(a,m,i){if(!eaten[sel+"-"+i])return a;return{kcal:a.kcal+m.kcal,p:a.p+m.p,c:a.c+m.c,f:a.f+m.f}},{kcal:0,p:0,c:0,f:0});
+var today=new Date().toISOString().slice(0,10);
+
+var suppTotals=[
+{name:"D3 Vitamini",val:"1600 IU",pct2:55},{name:"K2 (MK-7)",val:"150 mcg",pct2:100},
+{name:"\u00C7inko",val:"~25-30 mg",pct2:95},{name:"Selenyum",val:"82.5 mcg",pct2:100},
+{name:"Magnezyum",val:"400 mg",pct2:100},{name:"Omega-3",val:"~900 mg",pct2:90},
+{name:"Ashwagandha",val:"2 kaps\u00FCl",pct2:100},{name:"Boron",val:"6 mg",pct2:100}
+];
+
+// HEADER
+var header=e("div",{style:{background:"linear-gradient(135deg,#0F0F0F 0%,#1A1208 100%)",borderBottom:"1px solid #2A2520",padding:"20px 16px 16px"}},
+e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}},
+e("div",null,
+e("div",{style:{fontSize:11,fontFamily:font,color:"#C9A84C",letterSpacing:3,textTransform:"uppercase"}},"Cut Program"),
+e("div",{style:{fontSize:22,fontWeight:600,marginTop:4,color:"#F5F3EE"}},"28 Mar \u2192 4 Nis")),
+e("div",{style:{textAlign:"right"}},
+e("div",{style:{fontSize:11,color:"#888",fontFamily:font}},"HEDEF"),
+e("div",{style:{fontSize:18,fontWeight:600,color:"#C9A84C",fontFamily:font}},"1500 kcal"),
+e("div",{style:{fontSize:10,color:"#666",fontFamily:font}},"40P / 40C / 20F"))),
+e("div",{style:{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginTop:14}},
+[{l:"Kcal",v:et.kcal,g:GOALS.kcal,co:"#C9A84C"},{l:"Protein",v:et.p,g:GOALS.protein,co:"#1D9E75"},{l:"Karb",v:et.c,g:GOALS.carbs,co:"#378ADD"},{l:"Ya\u011F",v:et.f,g:GOALS.fat,co:"#E24B4A"}].map(function(m,i){
+return e("div",{key:i,style:{textAlign:"center"}},
+e("div",{style:{fontSize:16,fontWeight:600,fontFamily:font,color:m.co}},m.v),
+e("div",{style:{fontSize:9,color:"#666",fontFamily:font}},m.l+" / "+m.g+(i>0?"g":"")),
+e("div",{style:{height:3,background:"#1A1A1A",borderRadius:2,marginTop:4,overflow:"hidden"}},
+e("div",{style:{height:"100%",width:pct(m.v,m.g)+"%",background:m.co,borderRadius:2,transition:"width 0.4s ease"}})))
+})));
+
+// TABS
+var tabs=e("div",{style:{display:"flex",borderBottom:"1px solid #1A1A1A",background:"#0F0F0F"}},
+["plan","supps","tarifler"].map(function(t){
+var labels={plan:"Program",supps:"Suppler",tarifler:"Tarifler"};
+return e("button",{key:t,onClick:function(){setView(t)},style:{
+flex:1,padding:"10px 0",border:"none",fontSize:12,fontFamily:font,
+background:view===t?"#1A1208":"transparent",color:view===t?"#C9A84C":"#555",
+borderBottom:view===t?"2px solid #C9A84C":"2px solid transparent",
+cursor:"pointer",textTransform:"uppercase",letterSpacing:1.5}},labels[t])}));
+
+// PLAN VIEW
+var planView=view==="plan"?e("div",{style:{padding:"12px 16px"}},
+// Day selector
+e("div",{style:{display:"flex",gap:4,overflowX:"auto",paddingBottom:12}},
+DAYS.map(function(d,i){
+var isSel=i===sel,isT=d.date===today;
+var de2=d.meals.filter(function(_,mi){return eaten[i+"-"+mi]}).length;
+return e("button",{key:i,onClick:function(){setSel(i)},style:{
+minWidth:52,padding:"8px 6px",border:isSel?"1px solid #C9A84C":isT?"1px solid #333":"1px solid #1A1A1A",
+borderRadius:8,cursor:"pointer",background:isSel?"#1A1208":isT?"#111":"#0A0A0A",textAlign:"center"}},
+e("div",{style:{fontSize:10,color:isSel?"#C9A84C":"#666",fontFamily:font}},d.label.split(" ")[0]),
+e("div",{style:{fontSize:14,fontWeight:600,color:isSel?"#F5F3EE":"#888",marginTop:2}},d.label.split(" ")[1]),
+de2>0?e("div",{style:{fontSize:9,color:"#1D9E75",fontFamily:font,marginTop:2}},de2+"/"+d.meals.length):null)})),
+// Day label + tag
+e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}},
+e("div",{style:{fontSize:15,fontWeight:600,color:"#F5F3EE"}},day.label),
+e("span",{style:{fontSize:10,padding:"3px 10px",borderRadius:4,fontFamily:font,fontWeight:600,background:day.tagColor+"20",color:day.tagColor,letterSpacing:1}},day.tag)),
+// Day macros
+e("div",{style:{background:"#111",borderRadius:10,padding:"10px 14px",marginBottom:12,display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6}},
+[{l:"Plan",v:dt.kcal,c2:"#C9A84C"},{l:"P",v:dt.p+"g",c2:"#1D9E75"},{l:"C",v:dt.c+"g",c2:"#378ADD"},{l:"F",v:dt.f+"g",c2:dt.f>33?"#E24B4A":"#1D9E75"}].map(function(x,i){
+return e("div",{key:i,style:{textAlign:"center"}},
+e("div",{style:{fontSize:14,fontWeight:600,fontFamily:font,color:x.c2}},x.v),
+e("div",{style:{fontSize:9,color:"#555",fontFamily:font}},x.l))})),
+// Meals
+day.meals.map(function(meal,mi){
+var k=sel+"-"+mi,done=!!eaten[k],sc=slotColors[meal.slot]||"#888";
+return e("div",{key:mi,onClick:function(){toggleEat(sel,mi)},style:{
+display:"flex",alignItems:"center",gap:10,padding:"10px 12px",
+background:done?"#0D1A0F":"#111",borderRadius:10,marginBottom:6,
+border:done?"1px solid #1D9E7530":"1px solid #1A1A1A",
+cursor:"pointer",transition:"all 0.2s",opacity:done?0.7:1}},
+e("div",{style:{width:22,height:22,borderRadius:6,flexShrink:0,
+border:done?"none":"1.5px solid "+sc+"40",
+background:done?"#1D9E75":"transparent",
+display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:"#fff"}},done?"\u2713":null),
+e("div",{style:{flex:1,minWidth:0}},
+e("div",{style:{fontSize:10,color:sc,fontFamily:font,fontWeight:600,textTransform:"uppercase",letterSpacing:1}},meal.slot),
+e("div",{style:{fontSize:13,color:done?"#666":"#E8E6E0",marginTop:2,textDecoration:done?"line-through":"none",lineHeight:1.3}},meal.name)),
+e("div",{style:{textAlign:"right",flexShrink:0}},
+e("div",{style:{fontSize:13,fontWeight:600,fontFamily:font,color:done?"#555":"#C9A84C"}},meal.kcal),
+e("div",{style:{fontSize:9,fontFamily:font,color:"#555"}},meal.p+"P "+meal.c+"C "+meal.f+"F")))}),
+// Drink reminder
+e("div",{style:{background:"#0D0D15",border:"1px solid #1A1A2A",borderRadius:10,padding:"10px 14px",marginTop:8}},
+e("div",{style:{fontSize:10,color:"#378ADD",fontFamily:font,letterSpacing:1}},"ICECEK"),
+e("div",{style:{fontSize:12,color:"#888",marginTop:4}},"2.5L su + siyah kahve (2) + ye\u015Fil \u00E7ay (1) \u2014 \u015Feker/s\u00FCt YOK"))
+):null;
+
+// SUPPS VIEW
+var suppsView=view==="supps"?e("div",{style:{padding:"12px 16px"}},
+["sabah","aksam"].map(function(period){
+return e("div",{key:period,style:{marginBottom:16}},
+e("div",{style:{fontSize:11,fontFamily:font,letterSpacing:2,textTransform:"uppercase",color:period==="sabah"?"#EF9F27":"#7F77DD",marginBottom:8}},
+period==="sabah"?"\u2600\uFE0F Sabah rutini (kahvaltiyla)":"\uD83C\uDF19 Aksam rutini (yatmadan)"),
+SUPPS[period].map(function(s,i){
+var k2=today+"-"+period+"-"+i,done=!!suppsDone[k2];
+return e("div",{key:i,onClick:function(){toggleSupp(period,i)},style:{
+display:"flex",alignItems:"center",gap:10,padding:"10px 12px",
+background:done?"#0D1A0F":"#111",borderRadius:10,marginBottom:5,
+border:done?"1px solid #1D9E7530":"1px solid #1A1A1A",
+cursor:"pointer",opacity:done?0.6:1,transition:"all 0.2s"}},
+e("div",{style:{width:20,height:20,borderRadius:5,flexShrink:0,background:done?"#1D9E75":"transparent",border:done?"none":"1.5px solid #333",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"#fff"}},done?"\u2713":null),
+e("div",{style:{fontSize:16,flexShrink:0}},s.icon),
+e("div",{style:{flex:1}},
+e("div",{style:{fontSize:13,fontWeight:500,color:done?"#666":"#E8E6E0"}},s.name),
+e("div",{style:{fontSize:11,color:"#666",fontFamily:font}},s.dose+" \u2014 "+s.note)))}))}),
+// Daily totals
+e("div",{style:{background:"#111",borderRadius:10,padding:"14px",marginTop:8}},
+e("div",{style:{fontSize:11,fontFamily:font,color:"#C9A84C",letterSpacing:1,marginBottom:8}},"GUNLUK TOPLAMLAR"),
+suppTotals.map(function(s,i){
+return e("div",{key:i,style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"5px 0",borderBottom:i<7?"1px solid #1A1A1A":"none"}},
+e("div",{style:{fontSize:12,color:"#CCC"}},s.name),
+e("div",{style:{display:"flex",alignItems:"center",gap:8}},
+e("div",{style:{fontSize:11,fontFamily:font,color:s.pct2>=90?"#1D9E75":"#EF9F27"}},s.val),
+e("div",{style:{width:40,height:3,background:"#1A1A1A",borderRadius:2,overflow:"hidden"}},
+e("div",{style:{height:"100%",width:s.pct2+"%",background:s.pct2>=90?"#1D9E75":"#EF9F27",borderRadius:2}}))))})),
+e("div",{style:{background:"#1A0D0D",border:"1px solid #2A1A1A",borderRadius:10,padding:"10px 14px",marginTop:10,fontSize:11,color:"#A32D2D",lineHeight:1.6}},
+e("strong",null,"BIRAKILAN: "),"Bayer efervesan tablet \u2014 D3 \u00E7ok d\u00FC\u015F\u00FCk, C fazla, \u00E7inko yetersiz. Yeni stack hepsini kaps\u0131yor.")
+):null;
+
+// RECIPES VIEW
+var recipesView=view==="tarifler"?e("div",{style:{padding:"12px 16px"}},
+Object.entries(RECIPES).map(function(entry){
+var name=entry[0],r=entry[1],isOpen=openR===name;
+return e("div",{key:name,style:{marginBottom:8}},
+e("div",{onClick:function(){setOpenR(isOpen?null:name)},style:{
+background:isOpen?"#1A1208":"#111",borderRadius:10,
+border:isOpen?"1px solid #C9A84C30":"1px solid #1A1A1A",padding:"12px 14px",cursor:"pointer"}},
+e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+e("div",{style:{fontSize:14,fontWeight:500,color:isOpen?"#C9A84C":"#E8E6E0"}},name),
+e("div",{style:{display:"flex",gap:8,alignItems:"center"}},
+e("span",{style:{fontSize:10,fontFamily:font,color:"#888"}},r.time),
+e("span",{style:{fontSize:10,padding:"2px 6px",borderRadius:4,background:r.diff.indexOf("Kolay")>=0?"#1D9E7520":"#EF9F2720",color:r.diff.indexOf("Kolay")>=0?"#1D9E75":"#EF9F27"}},r.diff),
+e("span",{style:{color:"#555",fontSize:14}},isOpen?"\u25B2":"\u25BC"))),
+isOpen?e("div",{style:{marginTop:12}},
+// Ingredients
+r.ingredients?e("div",{style:{background:"#0A0A0A",border:"1px solid #1A1A1A",borderRadius:8,padding:"10px 12px",marginBottom:12}},
+e("div",{style:{fontSize:10,fontFamily:font,color:"#EF9F27",letterSpacing:1,marginBottom:6}},"MALZEMELER (terazide tart)"),
+r.ingredients.map(function(ing,ii){
+return e("div",{key:ii,style:{display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:ii<r.ingredients.length-1?"1px solid #151515":"none",fontSize:12}},
+e("span",{style:{color:"#BBB"}},ing.item),
+e("span",{style:{color:"#C9A84C",fontFamily:font,fontWeight:500,flexShrink:0,marginLeft:8}},ing.g))})):null,
+// Steps
+e("div",{style:{fontSize:10,fontFamily:font,color:"#1D9E75",letterSpacing:1,marginBottom:8}},"ADIM ADIM"),
+r.steps.map(function(step,si){
+return e("div",{key:si,style:{display:"flex",gap:10,marginBottom:10}},
+e("div",{style:{width:22,height:22,borderRadius:"50%",flexShrink:0,background:"#C9A84C20",color:"#C9A84C",fontSize:11,fontFamily:font,display:"flex",alignItems:"center",justifyContent:"center"}},si+1),
+e("div",{style:{fontSize:12,color:"#CCC",lineHeight:1.7}},step))}),
+// Cut notes
+e("div",{style:{background:"#0D0D00",border:"1px solid #2A2A00",borderRadius:8,padding:"8px 12px",marginTop:8}},
+e("div",{style:{fontSize:10,fontFamily:font,color:"#E24B4A",letterSpacing:1}},"CUT KURALLARI"),
+e("div",{style:{fontSize:11,color:"#AAA",marginTop:4,lineHeight:1.5}},r.cut_notes))
+):null))})):null;
+
+// Footer
+var footer=e("div",{style:{textAlign:"center",padding:"16px",fontSize:10,color:"#333",fontFamily:font}},
+"87.5 \u2192 80 kg | 40P 40C 20F | \"It's all mentalite!\" \uD83E\uDD18");
+
+return e("div",null,header,tabs,planView,suppsView,recipesView,footer);
+}
+
+ReactDOM.render(e(App),document.getElementById("root"));
+</script>
+</body>
+</html>
